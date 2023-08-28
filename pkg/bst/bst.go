@@ -52,3 +52,11 @@ func (bst *BST) TraverseLevelOrder() []int {
 func (bst *BST) Height() int {
 	return bst.root.height()
 }
+
+func (bst *BST) Max() int {
+	return bst.root.max()
+}
+
+func (bst *BST) Min() int {
+	return bst.root.min()
+}

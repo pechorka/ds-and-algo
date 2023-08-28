@@ -77,19 +77,10 @@ func (n *node) deleteNode() *node {
 	}
 
 	// Two children
-	smallestValue := n.right.findSmallestValue()
+	smallestValue := n.right.min()
 	n.value = smallestValue
 	n.right = n.right.delete(smallestValue)
 	return n
-}
-
-// findSmallestValue assumes that n is not nil
-func (n *node) findSmallestValue() int {
-	temp := n
-	for temp.left != nil {
-		temp = temp.left
-	}
-	return temp.value
 }
 
 // example output:
@@ -192,4 +183,20 @@ func (n *node) height() int {
 	} else {
 		return rightHeight + 1
 	}
+}
+
+func (n *node) max() int {
+	temp := n
+	for temp.right != nil {
+		temp = temp.right
+	}
+	return temp.value
+}
+
+func (n *node) min() int {
+	temp := n
+	for temp.left != nil {
+		temp = temp.left
+	}
+	return temp.value
 }

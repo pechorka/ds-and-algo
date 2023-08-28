@@ -112,6 +112,16 @@ func TestBST(t *testing.T) {
 		})
 	})
 
+	t.Run("Minimum value", func(t *testing.T) {
+		bst := prepareTree()
+		require.Equal(t, 20, bst.Min())
+	})
+
+	t.Run("Maximum value", func(t *testing.T) {
+		bst := prepareTree()
+		require.Equal(t, 80, bst.Max())
+	})
+
 	t.Run("BST Properties", func(t *testing.T) {
 		bst := &BST{}
 		values := []int{5, 3, 8, 1, 4, 7, 9}
