@@ -11,7 +11,7 @@ func TestGraphOperations(t *testing.T) {
 
 	g.AddNode("A")
 	g.AddNode("B")
-	g.AddEdge("A", "B")
+	g.AddEdge("A", "B", 1)
 
 	require.ElementsMatch(t, []string{"A", "B"}, g.Nodes())
 	expectedEdges := [][2]string{{"A", "B"}, {"B", "A"}}
@@ -28,9 +28,9 @@ func TestDFS(t *testing.T) {
 		g.AddNode(n)
 	}
 
-	g.AddEdge("A", "B")
-	g.AddEdge("A", "C")
-	g.AddEdge("B", "D")
+	g.AddEdge("A", "B", 1)
+	g.AddEdge("A", "C", 1)
+	g.AddEdge("B", "D", 1)
 	// now graph looks like
 	// A
 	// ├── B
@@ -50,9 +50,9 @@ func TestBFS(t *testing.T) {
 		g.AddNode(n)
 	}
 
-	g.AddEdge("A", "B")
-	g.AddEdge("A", "C")
-	g.AddEdge("B", "D")
+	g.AddEdge("A", "B", 1)
+	g.AddEdge("A", "C", 1)
+	g.AddEdge("B", "D", 1)
 	// now graph looks like
 	// A
 	// ├── B
@@ -62,4 +62,28 @@ func TestBFS(t *testing.T) {
 	visited := g.BFS("A")
 	expectedOrder := []string{"A", "B", "C", "D"}
 	require.Equal(t, expectedOrder, visited)
+}
+
+func TestDijkstrasAlgorithm(t *testing.T) {
+	g := NewUndirected()
+
+	g.AddNode("A")
+	g.AddNode("B")
+	g.AddNode("C")
+	g.AddEdge("A", "B", 1)
+	g.AddEdge("B", "C", 2)
+	g.AddEdge("A", "C", 4)
+	// now graph looks like
+	// A - 1 - B
+	//   \     |
+	//     4   2
+	//       \ |
+	//         C
+
+	distances := g.Dijkstra("A")
+	require.Equal(t, map[string]int{
+		"A": 0,
+		"B": 1,
+		"C": 3, // A -> B -> C is the shortest path
+	}, distances)
 }
