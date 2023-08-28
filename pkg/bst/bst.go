@@ -30,13 +30,13 @@ func (bst *BST) DrawTree() string {
 }
 
 // TraverseInOrder left, root, right (DFS)
-func (n *BST) TraverseInOrder() []int {
-	return n.root.traverseInOrder()
+func (bst *BST) TraverseInOrder() []int {
+	return bst.root.traverseInOrder()
 }
 
 // TraversePreOrder root, left, right (DFS)
-func (n *BST) TraversePreOrder() []int {
-	return n.root.traversePreOrder()
+func (bst *BST) TraversePreOrder() []int {
+	return bst.root.traversePreOrder()
 }
 
 // TraversePostOrder left, right, root (DFS)
