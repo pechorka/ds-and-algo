@@ -178,3 +178,18 @@ func (n *node) traverseLevelOrder() []int {
 
 	return values
 }
+
+func (n *node) height() int {
+	if n == nil {
+		return 0
+	}
+
+	leftHeight := n.left.height()
+	rightHeight := n.right.height()
+
+	if leftHeight > rightHeight {
+		return leftHeight + 1
+	} else {
+		return rightHeight + 1
+	}
+}

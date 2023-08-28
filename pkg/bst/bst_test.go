@@ -8,19 +8,28 @@ import (
 )
 
 func TestBST(t *testing.T) {
+	prepareTree := func() *BST {
+		bst := New()
+		values := []int{50, 30, 70, 20, 40, 60, 80}
+		for _, v := range values {
+			bst.Insert(v)
+		}
+		// 50
+		// ├── 30
+		// │   ├── 20
+		// │   └── 40
+		// └── 70
+		//     ├── 60
+		//     └── 80
+		return bst
+	}
 	t.Run("Insert and Search", func(t *testing.T) {
-		prepareTree := func() *BST {
-			bst := &BST{}
+		t.Run("happy case", func(t *testing.T) {
 			values := []int{5, 3, 8, 1, 4, 7, 9}
-
+			bst := New()
 			for _, v := range values {
 				bst.Insert(v)
 			}
-			return bst
-		}
-
-		t.Run("happy case", func(t *testing.T) {
-			bst := prepareTree()
 			require.True(t, bst.Search(5))
 			require.True(t, bst.Search(3))
 			require.True(t, bst.Search(8))
@@ -44,15 +53,6 @@ func TestBST(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		prepareTree := func() *BST {
-			bst := New()
-			values := []int{50, 30, 70, 20, 40, 60, 80}
-			for _, v := range values {
-				bst.Insert(v)
-			}
-			return bst
-		}
-
 		t.Run("Delete leaf node", func(t *testing.T) {
 			bst := prepareTree()
 			bst.Delete(20)
@@ -76,22 +76,6 @@ func TestBST(t *testing.T) {
 	})
 
 	t.Run("Traverse", func(t *testing.T) {
-		prepareTree := func() *BST {
-			bst := New()
-			values := []int{50, 30, 70, 20, 40, 60, 80}
-			for _, v := range values {
-				bst.Insert(v)
-			}
-			// 50
-			// ├── 30
-			// │   ├── 20
-			// │   └── 40
-			// └── 70
-			//     ├── 60
-			//     └── 80
-			return bst
-		}
-
 		t.Run("InOrder", func(t *testing.T) {
 			bst := prepareTree()
 			expected := []int{20, 30, 40, 50, 60, 70, 80}
@@ -121,6 +105,13 @@ func TestBST(t *testing.T) {
 		})
 	})
 
+	t.Run("Height", func(t *testing.T) {
+		t.Run("Height of the tree", func(t *testing.T) {
+			bst := prepareTree()
+			require.Equal(t, 3, bst.Height())
+		})
+	})
+
 	t.Run("BST Properties", func(t *testing.T) {
 		bst := &BST{}
 		values := []int{5, 3, 8, 1, 4, 7, 9}
@@ -129,16 +120,12 @@ func TestBST(t *testing.T) {
 			bst.Insert(v)
 		}
 
-		// Assuming you have a method to get the left child and right child
-		// rootValue should be 5
 		rootValue := bst.root.value
 		require.Equal(t, 5, rootValue)
 
-		// Left child of root should be 3
 		leftChildValue := bst.root.left.value
 		require.Equal(t, 3, leftChildValue)
 
-		// Right child of root should be 8
 		rightChildValue := bst.root.right.value
 		require.Equal(t, 8, rightChildValue)
 	})

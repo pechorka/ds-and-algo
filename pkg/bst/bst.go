@@ -48,3 +48,7 @@ func (bst *BST) TraversePostOrder() []int {
 func (bst *BST) TraverseLevelOrder() []int {
 	return bst.root.traverseLevelOrder()
 }
+
+func (bst *BST) Height() int {
+	return bst.root.height()
+}
