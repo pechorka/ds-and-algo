@@ -54,16 +54,16 @@ func (h *MinBinaryHeap[V]) swap(i, j int) {
 	h.idToIdx[h.heap[j].ID] = j
 }
 
-func (h *MinBinaryHeap[V]) ExtractMin() (val V, ok bool) {
+func (h *MinBinaryHeap[V]) ExtractMin() (id string, val V, ok bool) {
 	if len(h.heap) == 0 {
-		return val, false
+		return "", val, false
 	}
 	internalVal := h.heap[0]
 	h.swap(0, len(h.heap)-1)
 	h.heap = h.heap[:len(h.heap)-1]
 	delete(h.idToIdx, internalVal.ID)
 	h.bubbleDown()
-	return internalVal.Val, true
+	return internalVal.ID, internalVal.Val, true
 }
 
 // bubbleDown rebalances the heap from the top down

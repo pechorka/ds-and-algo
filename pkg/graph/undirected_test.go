@@ -60,8 +60,10 @@ func TestBFS(t *testing.T) {
 	// └── C
 
 	visited := g.BFS("A")
-	expectedOrder := []string{"A", "B", "C", "D"}
-	require.Equal(t, expectedOrder, visited)
+	// either order is possible
+	expectedOrder1 := []string{"A", "B", "C", "D"}
+	expectedOrder2 := []string{"A", "C", "B", "D"}
+	require.Subset(t, [][]string{expectedOrder1, expectedOrder2}, [][]string{visited})
 }
 
 func TestDijkstrasAlgorithm(t *testing.T) {

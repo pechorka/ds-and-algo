@@ -48,33 +48,39 @@ func TestBinaryMinHeap(t *testing.T) {
 		for _, v := range toInsert {
 			h.Add(strconv.Itoa(v), v)
 		}
-		val, ok := h.ExtractMin()
+		id, val, ok := h.ExtractMin()
 		require.True(t, ok)
+		require.Equal(t, "2", id)
 		require.EqualValues(t, 2, val)
 		require.EqualValues(t, 3, h.PeekOrZero())
 
-		val, ok = h.ExtractMin()
+		id, val, ok = h.ExtractMin()
 		require.True(t, ok)
+		require.Equal(t, "3", id)
 		require.EqualValues(t, 3, val)
 		require.EqualValues(t, 4, h.PeekOrZero())
 
-		val, ok = h.ExtractMin()
+		id, val, ok = h.ExtractMin()
 		require.True(t, ok)
+		require.Equal(t, "4", id)
 		require.EqualValues(t, 4, val)
 		require.EqualValues(t, 5, h.PeekOrZero())
 
-		val, ok = h.ExtractMin()
+		id, val, ok = h.ExtractMin()
 		require.True(t, ok)
+		require.Equal(t, "5", id)
 		require.EqualValues(t, 5, val)
 		require.EqualValues(t, 7, h.PeekOrZero())
 
-		val, ok = h.ExtractMin()
+		id, val, ok = h.ExtractMin()
 		require.True(t, ok)
+		require.Equal(t, "7", id)
 		require.EqualValues(t, 7, val)
 		require.EqualValues(t, 8, h.PeekOrZero())
 
-		val, ok = h.ExtractMin()
+		id, val, ok = h.ExtractMin()
 		require.True(t, ok)
+		require.Equal(t, "8", id)
 		require.EqualValues(t, 8, val)
 	})
 }

@@ -1,6 +1,9 @@
 package graph
 
-import "ds-and-algo/pkg/set"
+import (
+	"ds-and-algo/pkg/bheap"
+	"ds-and-algo/pkg/set"
+)
 
 type Undirected struct {
 	nodes map[string]string                   // map of node name to node
@@ -107,24 +110,27 @@ func (g *Undirected) BFS(start string) []string {
 func (g *Undirected) Dijkstra(start string) map[string]int { // map of node name to distance
 	visitedSet := set.New[string]()
 	distances := make(map[string]int)
+	heap := bheap.NewMinHeap[int]()
 	const infinity = int(^uint(0) >> 1) // max int
 	for name := range g.nodes {
+		heap.Add(name, infinity)
 		distances[name] = infinity
 	}
 	current := start
+	heap.Update(current, 0)
 	distances[current] = 0
 	for {
 		if current == "" {
 			return distances
 		}
 		if visitedSet.Contains(current) {
-			current = selectSmallest(distances, visitedSet)
+			current = selectSmallest(heap, visitedSet)
 			continue
 		}
 		visitedSet.Add(current)
 		neighbors, ok := g.edges[current]
 		if !ok {
-			current = selectSmallest(distances, visitedSet)
+			current = selectSmallest(heap, visitedSet)
 			continue
 		}
 		currentDistance := distances[current]
@@ -132,25 +138,24 @@ func (g *Undirected) Dijkstra(start string) map[string]int { // map of node name
 			totalDistance := e.distance + currentDistance
 			if totalDistance < distances[e.destination] {
 				distances[e.destination] = totalDistance
+				heap.Update(e.destination, totalDistance)
 			}
 		})
-		current = selectSmallest(distances, visitedSet)
+		current = selectSmallest(heap, visitedSet)
 	}
 }
 
-func selectSmallest(distances map[string]int, visitedSet *set.Set[string]) string {
-	var smallest string
-	smallestDistance := int(^uint(0) >> 1) // max int
-	for name, distance := range distances {
-		if visitedSet.Contains(name) {
+func selectSmallest(heap *bheap.MinBinaryHeap[int], visitedSet *set.Set[string]) string {
+	for {
+		id, _, ok := heap.ExtractMin()
+		if !ok {
+			return ""
+		}
+		if visitedSet.Contains(id) {
 			continue
 		}
-		if distance < smallestDistance {
-			smallestDistance = distance
-			smallest = name
-		}
+		return id
 	}
-	return smallest
 }
 
 type undirectedEdge struct {
