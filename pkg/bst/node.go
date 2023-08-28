@@ -119,3 +119,62 @@ func (n *node) drawNode(prefix, childPrefix string, builder *strings.Builder) {
 	n.left.drawNode(childPrefix+"├── ", childPrefix+"│   ", builder)
 	n.right.drawNode(childPrefix+"└── ", childPrefix+"    ", builder)
 }
+
+func (n *node) traverseInOrder() []int {
+	var values []int
+	if n.left != nil {
+		values = append(values, n.left.traverseInOrder()...)
+	}
+	values = append(values, n.value)
+	if n.right != nil {
+		values = append(values, n.right.traverseInOrder()...)
+	}
+	return values
+}
+
+func (n *node) traversePreOrder() []int {
+	var values []int
+	values = append(values, n.value)
+	if n.left != nil {
+		values = append(values, n.left.traversePreOrder()...)
+	}
+	if n.right != nil {
+		values = append(values, n.right.traversePreOrder()...)
+	}
+	return values
+}
+
+func (n *node) traversePostOrder() []int {
+	var values []int
+	if n.left != nil {
+		values = append(values, n.left.traversePostOrder()...)
+	}
+	if n.right != nil {
+		values = append(values, n.right.traversePostOrder()...)
+	}
+	values = append(values, n.value)
+	return values
+}
+
+func (n *node) traverseLevelOrder() []int {
+	var values []int
+	var queue []*node
+
+	queue = append(queue, n)
+
+	for len(queue) > 0 {
+		current := queue[0]
+		queue = queue[1:]
+		values = append(values, current.value)
+
+		if current.left != nil {
+			queue = append(queue, current.left)
+		}
+
+		if current.right != nil {
+			queue = append(queue, current.right)
+		}
+	}
+
+	return values
+}

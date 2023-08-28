@@ -75,6 +75,52 @@ func TestBST(t *testing.T) {
 		})
 	})
 
+	t.Run("Traverse", func(t *testing.T) {
+		prepareTree := func() *BST {
+			bst := New()
+			values := []int{50, 30, 70, 20, 40, 60, 80}
+			for _, v := range values {
+				bst.Insert(v)
+			}
+			// 50
+			// ├── 30
+			// │   ├── 20
+			// │   └── 40
+			// └── 70
+			//     ├── 60
+			//     └── 80
+			return bst
+		}
+
+		t.Run("InOrder", func(t *testing.T) {
+			bst := prepareTree()
+			expected := []int{20, 30, 40, 50, 60, 70, 80}
+			actual := bst.TraverseInOrder()
+			require.Equal(t, expected, actual)
+		})
+
+		t.Run("PreOrder", func(t *testing.T) {
+			bst := prepareTree()
+			expected := []int{50, 30, 20, 40, 70, 60, 80}
+			actual := bst.TraversePreOrder()
+			require.Equal(t, expected, actual)
+		})
+
+		t.Run("PostOrder", func(t *testing.T) {
+			bst := prepareTree()
+			expected := []int{20, 40, 30, 60, 80, 70, 50}
+			actual := bst.TraversePostOrder()
+			require.Equal(t, expected, actual)
+		})
+
+		t.Run("LevelOrder", func(t *testing.T) {
+			bst := prepareTree()
+			expected := []int{50, 30, 70, 20, 40, 60, 80}
+			actual := bst.TraverseLevelOrder()
+			require.Equal(t, expected, actual)
+		})
+	})
+
 	t.Run("BST Properties", func(t *testing.T) {
 		bst := &BST{}
 		values := []int{5, 3, 8, 1, 4, 7, 9}
