@@ -1,6 +1,7 @@
 package bst
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -8,23 +9,38 @@ import (
 
 func TestBST(t *testing.T) {
 	t.Run("Insert and Search", func(t *testing.T) {
-		bst := &BST{}
-		values := []int{5, 3, 8, 1, 4, 7, 9}
+		prepareTree := func() *BST {
+			bst := &BST{}
+			values := []int{5, 3, 8, 1, 4, 7, 9}
 
-		for _, v := range values {
-			bst.Insert(v)
+			for _, v := range values {
+				bst.Insert(v)
+			}
+			return bst
 		}
 
-		require.True(t, bst.Search(5))
-		require.True(t, bst.Search(3))
-		require.True(t, bst.Search(8))
-		require.True(t, bst.Search(1))
-		require.True(t, bst.Search(4))
-		require.True(t, bst.Search(7))
-		require.True(t, bst.Search(9))
-		require.False(t, bst.Search(0))
-		require.False(t, bst.Search(6))
-		require.False(t, bst.Search(10))
+		t.Run("happy case", func(t *testing.T) {
+			bst := prepareTree()
+			require.True(t, bst.Search(5))
+			require.True(t, bst.Search(3))
+			require.True(t, bst.Search(8))
+			require.True(t, bst.Search(1))
+			require.True(t, bst.Search(4))
+			require.True(t, bst.Search(7))
+			require.True(t, bst.Search(9))
+			require.False(t, bst.Search(0))
+			require.False(t, bst.Search(6))
+			require.False(t, bst.Search(10))
+		})
+
+		t.Run("insert duplicate", func(t *testing.T) {
+			bst := New()
+			bst.Insert(3)
+			bst.Insert(3)
+			require.NotNil(t, bst.root)
+			require.Nil(t, bst.root.left)
+			require.Nil(t, bst.root.right)
+		})
 	})
 
 	t.Run("Delete", func(t *testing.T) {
@@ -79,6 +95,31 @@ func TestBST(t *testing.T) {
 		// Right child of root should be 8
 		rightChildValue := bst.root.right.value
 		require.Equal(t, 8, rightChildValue)
+	})
+}
+
+func TestDrawTree(t *testing.T) {
+	t.Run("Draw larger tree", func(t *testing.T) {
+		bst := New()
+		values := []int{50, 30, 70, 20, 40, 60, 80}
+		for _, v := range values {
+			bst.Insert(v)
+		}
+
+		expectedDrawing := strings.Join([]string{
+			"50",
+			"├── 30",
+			"│   ├── 20",
+			"│   └── 40",
+			"└── 70",
+			"    ├── 60",
+			"    └── 80",
+		}, "\n")
+		expectedDrawing += "\n"
+
+		tree := bst.DrawTree()
+
+		require.Equal(t, expectedDrawing, tree)
 	})
 }
 
