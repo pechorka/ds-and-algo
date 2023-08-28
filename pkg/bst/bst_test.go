@@ -27,6 +27,38 @@ func TestBST(t *testing.T) {
 		require.False(t, bst.Search(10))
 	})
 
+	t.Run("Delete", func(t *testing.T) {
+		prepareTree := func() *BST {
+			bst := New()
+			values := []int{50, 30, 70, 20, 40, 60, 80}
+			for _, v := range values {
+				bst.Insert(v)
+			}
+			return bst
+		}
+
+		t.Run("Delete leaf node", func(t *testing.T) {
+			bst := prepareTree()
+			bst.Delete(20)
+			require.False(t, bst.Search(20))
+		})
+
+		t.Run("Delete node with one child", func(t *testing.T) {
+			bst := prepareTree()
+			bst.Delete(30)
+			require.False(t, bst.Search(30))
+			require.True(t, bst.Search(40))
+		})
+
+		t.Run("Delete node with two children", func(t *testing.T) {
+			bst := prepareTree()
+			bst.Delete(50)
+			require.False(t, bst.Search(50))
+			// Check that children are still there
+			require.True(t, bst.Search(60) && bst.Search(40))
+		})
+	})
+
 	t.Run("BST Properties", func(t *testing.T) {
 		bst := &BST{}
 		values := []int{5, 3, 8, 1, 4, 7, 9}

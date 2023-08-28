@@ -18,11 +18,11 @@ func (bst *BST) Insert(value int) {
 }
 
 func (bst *BST) Search(value int) bool {
-	if bst.root == nil {
-		return false
-	}
-
 	return bst.root.search(value)
+}
+
+func (bst *BST) Delete(value int) {
+	bst.root = bst.root.delete(value)
 }
 
 type node struct {
@@ -58,11 +58,55 @@ func (n *node) search(value int) bool {
 
 	if n.value == value {
 		return true
-	}
-
-	if value <= n.value {
+	} else if value < n.value {
 		return n.left.search(value)
+	} else {
+		return n.right.search(value)
+	}
+}
+
+func (n *node) delete(value int) *node {
+	if n == nil {
+		return nil
 	}
 
-	return n.right.search(value)
+	if value < n.value {
+		n.left = n.left.delete(value)
+	} else if value > n.value {
+		n.right = n.right.delete(value)
+	} else {
+		return n.deleteNode()
+	}
+	return n
+}
+
+func (n *node) deleteNode() *node {
+	// Zero children
+	if n.left == nil && n.right == nil {
+		return nil
+	}
+
+	// One child
+	if n.left == nil {
+		return n.right
+	}
+
+	if n.right == nil {
+		return n.left
+	}
+
+	// Two children
+	smallestValue := n.right.findSmallestValue()
+	n.value = smallestValue
+	n.right = n.right.delete(smallestValue)
+	return n
+}
+
+// findSmallestValue assumes that n is not nil
+func (n *node) findSmallestValue() int {
+	temp := n
+	for temp.left != nil {
+		temp = temp.left
+	}
+	return temp.value
 }
